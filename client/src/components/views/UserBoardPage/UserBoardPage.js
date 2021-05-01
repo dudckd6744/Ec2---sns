@@ -3,19 +3,25 @@ import React, { useEffect, useState } from 'react'
 import { Card ,Image} from 'antd';
 import { useSelector } from 'react-redux';
 import Axios from 'axios';
+import ImageSilder from '../LandingPage/Sections/ImageSilder';
 
 const { Meta } = Card;
 
 function UserBoardPage() {
 
     const [Board, setBoard] = useState([]);
+    const [Skip, setSkip] = useState(0)
+    const [Limit, setlimit] = useState(3)
+    const [PostSize, setPostSize] = useState(0)
 
     const user = useSelector(state => state.user.userData)
     
     useEffect(() => {
 
-        const body ={
-            writer: localStorage.getItem('userId')
+        let body ={
+            writer: localStorage.getItem('userId'),
+            skip:Skip,
+            limit:Limit
         }
         
         console.log(body)
@@ -25,12 +31,37 @@ function UserBoardPage() {
             if(response.data.success){
                 console.log(response.data)
                 setBoard(response.data.board)
+                setPostSize(response.data.postSize)
+
             }else{
                 alert("err")
             }
         })
     }, [])        
+    const onclickhandle =()=>{
 
+        let skip = Skip+Limit;
+
+        let body={
+            writer: localStorage.getItem('userId'),
+            skip: skip,
+            limit:Limit,
+            lodemore:true
+        }
+        Axios.post('/api/sns/getuserboard', body)
+        .then(response => {
+            if(response.data.success){
+                console.log(response.data)
+                setPostSize(response.data.postSize)
+                if(body.lodemore){
+                    setBoard([...Board, ...response.data.board])
+                }
+            }else{
+                alert("err")
+            }
+        })        
+        setSkip(skip)
+    }
     
         
     var renderBoard = Board
@@ -38,22 +69,20 @@ function UserBoardPage() {
             if(board.image && board.image.length > 0){
                 return (                            
                     <Card key={i}
-                        style={{ maxWidth:"700px",width:'700px' ,margin: "2rem auto"}}
+                        style={{ maxWidth:"700px",width:'100%' ,margin: "2rem auto"}}
                         cover={
-                        <Image
-                            style={{ height:"300px"}}
-                            // alt="example"
-                            src={`http://localhost:5000/${board.image}`}
-                        />
+                    <a href ={`/board/${board._id}`} >
+                                {/* style={{ height:"300px"}} */}
+                            <ImageSilder images={board.image}/>                          
+                            </a>
                         }
                         >   
-                        <a href ={`http://localhost:3000/board/${board._id}`} >
+                        
                         <Meta
                         avatar={board.writer.name}
                         title={board.title}
                         description={board.description}
                         />
-                        </a>
                     </Card>
                 )
             }else{
@@ -80,9 +109,9 @@ function UserBoardPage() {
             }
             
     })
-    .sort((a,b)=>
-        b.key - a.key
-    )
+    // .sort((a,b)=>
+    //     b.key - a.key
+    // )
 
     return (
     <>
@@ -92,6 +121,12 @@ function UserBoardPage() {
         <hr/>
     </div>
     {renderBoard}
+    <br />
+    {PostSize >= Limit &&
+                <div style={{ display:"flex", justifyContent:"center"}}>
+                    <button onClick={onclickhandle}>더 보기</button>
+                </div>
+            }
         </>
     )
 }

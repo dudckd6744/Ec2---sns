@@ -2,7 +2,7 @@
 /build
 /uploads
 dev.js
-
+s3.js
 
 
 .DS_Store

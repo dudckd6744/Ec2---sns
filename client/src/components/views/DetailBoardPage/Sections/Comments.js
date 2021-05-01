@@ -85,12 +85,12 @@ function Comments(props) {
                 <Input 
                 value={Comments}
                 onChange={handleComment}
-                style={{width:"85%",height:"50px"}} 
+                style={{width:"80%",height:"50px"}} 
                 size="large"
                 />
                 <Button 
                 
-                style={{width:"15%",height:"50px"}} 
+                style={{width:"20%",height:"50px"}} 
                 size="large" 
                 type="primary"
                 onClick={handleSubmit}

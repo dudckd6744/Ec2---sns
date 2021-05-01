@@ -4,6 +4,7 @@ import { Image } from 'antd';
 import Comments from './Sections/Comments';
 import Axios from 'axios';
 import { RestTwoTone } from '@ant-design/icons';
+import ProductImage from './Sections/ProductImage';
 
 const { Meta } = Card;
 
@@ -14,17 +15,16 @@ function DetailBoardPage(props) {
     // console.log(props.match.params.boardId)
     const variable = {boardId:boardId}
 
-    const [Board, setBoard] = useState([])
+    const [Board, setBoard] = useState({})
     const [comments, setcomments] = useState([])
     const [Reply, setReply] = useState([])
 
     useEffect(() => {
-
         Axios.post("/api/sns/getBoardDetail", variable)
         .then(response => {
             if(response.data){
-                // console.log(response.data)
-                setBoard(response.data)
+                console.log(response.data[0])
+                setBoard(response.data[0])
             }else{
                 alert("게시글 정보를 가져오는데 실패하였습니다.")
             }
@@ -62,17 +62,18 @@ function DetailBoardPage(props) {
     }
 
     var renderBoard = () =>{
-        if(Board[0]&& Board[0].image && Board[0].image.length >0){
+        if(Board && Board.image && Board.image.length >0){
             return(
                 <Card
-                    hoverable
-                    style={{ maxwidth: "90%", margin:'2rem 2rem' }}
-                    cover={<Image 
-                        style={{height:"600px"}}
-                        alt="example" 
-                        src={`http://localhost:5000/${Board[0]&& Board[0].image}`}/>}
+                    style={{ maxwidth: "90%" ,margin:'2rem 2rem' }}
+                    cover={<ProductImage detail={Board}/>
+                    // <Image 
+                    //     style={{height:"600px"}}
+                    //     alt="example" 
+                    //     src={`${Board[0]&& Board[0].image}`}/>
+                    }
                 >
-                    <Meta title={Board[0]&& Board[0].title} description={Board[0]&& Board[0].description} />
+                    <Meta title={Board&& Board.title} description={Board&& Board.description} />
                 </Card>
             )
         }else{
@@ -82,10 +83,10 @@ function DetailBoardPage(props) {
                     maxwidth: "90%", margin:'2rem 2rem',border:"2px solid gray",
                     borderRadius:"10px",height:"700px",fontSize:"20px"
                 }}
-                title={<h1>{Board[0]&& Board[0].title}</h1>}
+                title={<h1>{Board&& Board.title}</h1>}
                 size="large"
                 bordered={false}>
-                {Board[0]&& Board[0].description}
+                {Board&& Board.description}
                 </Card>
 
             )

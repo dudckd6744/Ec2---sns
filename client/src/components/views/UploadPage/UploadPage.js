@@ -77,7 +77,7 @@ function UploadPage(props) {
     }
 
     return (
-        <div style={{  maxWidth:"700px", margin: "2rem auto"}}>
+        <div style={{  maxWidth:"700px", margin: "2rem auto", }}>
             <div style={{textAlign:"center", marginBottom:"2rem"}}>
                 <Title  level={2}> UP load </Title>
             </div>
@@ -92,19 +92,21 @@ function UploadPage(props) {
                 <br />
                 <br />
                 <label><h3>description</h3></label>
-                <Input style={{display:'flex', height:'360px', position:'relative'}}
-                    value={Description} onChange={handleDescription} autoFocus/>
-                
-                
+                <Input style={{display:'flex', height:'360px',position:"relative" }}
+                    value={Description} onChange={handleDescription} autoFocus></Input>
+                <div style={{display:"flex",  width:"240px", height:"160px",overflowX:"scroll",position:"absolute",top:"360px"}} 
+                        >
                     {Images.map((image, i)=>(
                         
-                            <img onClick={()=>onDelet(image)} 
-                            key={i} style={{  width:"240px", height:"160px", position:"absolute", top:"350px" }} 
-                            src={`http://localhost:5000/${image}`}/>
+                            <img                        
+                            key={i} 
+                            onClick={()=>onDelet(image)} 
+                            style={{ minWidth:"240px", width:"240px", height:"160px" }} 
+                            src={`${image}`}/>
                     ))}
+                </div>
 
                 
-
                 <br />
                 <br />
                 <Dropzone
@@ -119,7 +121,7 @@ function UploadPage(props) {
                 <Button 
                 onClick={handleSubmit}
                 size="large" 
-                style={{float:'right'}} 
+                style={{float:'right' }} 
                 type="primary">제출</Button>
 
             </Form>

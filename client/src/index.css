@@ -1,3 +1,22 @@
+@import "~react-image-gallery/styles/css/image-gallery.css";
+
+.image-gallery {
+    width: 100%;
+    height: auto;
+}
+
+.image-gallery-slide img {
+    width: 100%;
+    height: 600px;
+    max-height: 80vh;
+    object-fit: cover;
+    overflow: hidden;
+    object-position: center center;
+}
+
+.fullscreen .image-gallery-slide img {
+    max-height: 100vh;
+}
 body {
   /* overflow-y: hidden;  */
   overflow-x: hidden;
